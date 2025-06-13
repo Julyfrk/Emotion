@@ -14,6 +14,8 @@ from dotenv import load_dotenv
 from fer import FER
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+from reportlab.lib.utils import ImageReader
+
 
 app = Flask(__name__)
 CORS(app)
@@ -122,12 +124,16 @@ def detectar_puntos_y_procesar_imagenes():
         img_buffer = io.BytesIO()
         imagen_con_puntos.save(img_buffer, format='PNG')
         img_buffer.seek(0)
+       # Usar ImageReader
+        image_reader = ImageReader(img_buffer)
+
         # Ajusta tamaño y posición según te convenga:
         img_width = 300
         img_height = 300
         x = (width - img_width) / 2
         y = height - img_height - 100
-        c.drawImage(img_buffer, x, y, img_width, img_height)
+        c.drawImage(image_reader, x, y, img_width, img_height)
+      
 
         # Escribir texto de la emoción
         text_x = 50
