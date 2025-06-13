@@ -111,15 +111,7 @@ def detectar_puntos_y_procesar_imagenes():
         else:
             emocion_principal = "No detectada"
 
-        # (Opcional) Subida a Drive...
-        service = obtener_servicio_drive()
-        buf_drive = io.BytesIO()
-        imagen_pil.save(buf_drive, format='PNG')
-        buf_drive.seek(0)
-        media = MediaIoBaseUpload(buf_drive, mimetype='image/png')
-        meta = {'name': archivo.filename, 'parents':[FOLDER_ID]}
-        drive_file = service.files().create(body=meta, media_body=media).execute()
-        drive_id = drive_file.get('id')
+       
 
         # --- Generar PDF en memoria ---
         pdf_buffer = io.BytesIO()
@@ -143,10 +135,7 @@ def detectar_puntos_y_procesar_imagenes():
         c.setFont("Helvetica-Bold", 14)
         c.drawString(text_x, text_y, f"Emoción dominante: {emocion_principal}")
 
-        # (Opcional) ID de Drive
-        c.setFont("Helvetica", 10)
-        c.drawString(text_x, text_y - 20, f"Drive file ID: {drive_id}")
-
+       
         c.showPage()
         c.save()
         pdf_buffer.seek(0)
